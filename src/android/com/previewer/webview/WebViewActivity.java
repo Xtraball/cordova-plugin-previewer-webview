@@ -1,4 +1,4 @@
-package cl.kunder.webview;
+package com.previewer.webview;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -27,20 +27,23 @@ public class WebViewActivity extends CordovaActivity {
     super.onCreate(savedInstanceState);
         //Aqui debo crear el loading
     activity2 = this;
-    WebViewPlugin.webViewActivity = this;
-    Bundle b = getIntent().getExtras();
-    String url = b.getString("url");
-    Boolean shouldShowLoading = false;
-    try {
-      shouldShowLoading = b.getBoolean("shouldShowLoading");
-    }
-    catch(Exception e) {
 
-    }
-    if(shouldShowLoading){
-      showLoading();
-    }
-    loadUrl((url.matches("^(.*://|javascript:)[\\s\\S]*$")?"":"file:///android_asset/www/")+url);
+    loadUrl(launchUrl);
+
+    WebViewPlugin.webViewActivity = new WeakReference<WebViewActivity>(this);
+    //Bundle b = getIntent().getExtras();
+    //String url = b.getString("url");
+    //Boolean shouldShowLoading = false;
+    //try {
+    //  shouldShowLoading = b.getBoolean("shouldShowLoading");
+    //}
+    //catch(Exception e) {
+//
+    //}
+    //if(shouldShowLoading){
+    //  showLoading();
+    //}
+    //loadUrl((url.matches("^(.*://|javascript:)[\\s\\S]*$")?"":"file:///android_asset/www/")+url);
     appView.getView().setOnTouchListener(new View.OnTouchListener() {
       Handler handler = new Handler();
 

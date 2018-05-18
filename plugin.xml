@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-  id="cordova-plugin-second-webview"
-  version="2.11.2">
-  <name>Cordova Second Webview</name>
-  <description>Fork of kunder.cl webview plugin</description>
+        id="cordova-plugin-previewer-webview"
+        version="1.0.0">
+  <name>Cordova Previewer Webview</name>
+  <description>Plugin previewer webview</description>
   <license>Apache 2.0</license>
   <keywords>cordova,webview</keywords>
 
   <engines>
-    <engine name="cordova" version=">=3.4.0" />
+    <engine name="cordova"
+            version=">=3.4.0" />
   </engines>
 
   <!-- Web View -->
-  <js-module src="www/webViewPlugin.js" name="webview">
+  <js-module src="www/webViewPlugin.js"
+             name="webview">
     <clobbers target="webview" />
   </js-module>
 
@@ -21,16 +23,22 @@
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="WebViewPlugin" >
-        <param name="android-package" value="cl.kunder.webview.WebViewPlugin"/>
+        <param name="android-package" value="com.previewer.webview.WebViewPlugin"/>
       </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale" android:label="@string/activity_name" android:launchMode="standard" android:name="cl.kunder.webview.WebViewActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.DeviceDefault" android:windowSoftInputMode="adjustResize" android:exported="true">
+      <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
+                android:label="@string/activity_name"
+                android:launchMode="standard"
+                android:name="com.previewer.webview.WebViewActivity"
+                android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
+                android:windowSoftInputMode="adjustResize"
+                android:exported="true">
       </activity>
     </config-file>
 
-    <source-file src="src/android/cl/kunder/webview/WebViewPlugin.java" target-dir="src/cl/kunder/webview" />
-    <source-file src="src/android/cl/kunder/webview/WebViewActivity.java" target-dir="src/cl/kunder/webview" />
+    <source-file src="src/android/com/previewer/webview/WebViewPlugin.java" target-dir="src/com/previewer/webview" />
+    <source-file src="src/android/com/previewer/webview/WebViewActivity.java" target-dir="src/com/previewer/webview" />
   </platform>
 
   <!-- ios -->

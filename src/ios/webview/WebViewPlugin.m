@@ -3,6 +3,9 @@
 #import <Cordova/CDV.h>
 #import "WebViewPlugin.h"
 
+#import "MainViewController.h"
+#import "Constants.h"
+
 @implementation WebViewPlugin
 
 @synthesize webViewController;
@@ -116,14 +119,21 @@
 }
 
 - (void)show:(CDVInvokedUrlCommand*)command {
-  NSString* url=(NSString*)[command.arguments objectAtIndex:0];
-  NSLog(@"showwebViewView %@", url);
+  NSString* appDomain=(NSString*)[command.arguments objectAtIndex:0];
+  NSLog(@"appDomain %@", appDomain);
+  NSString* appKey=(NSString*)[command.arguments objectAtIndex:1];
+    NSLog(@"appKey %@", appKey);
+
+  isPreview = true;
+  appDomain = appDomain;
+  appKey = appKey;
+
   [self.commandDelegate runInBackground:^{
     @try {
       dispatch_async(dispatch_get_main_queue(), ^{
         webViewController = [[WebViewController alloc] init];
           webViewController.delegate = self; // esto es para poder recibir el evento de que webView se cerro
-          webViewController.startPage = url;
+          //webViewController.startPage = url;
           [self.viewController presentViewController:webViewController animated:NO completion:nil];
         });
 
@@ -140,6 +150,11 @@
 
 - (void)hide:(CDVInvokedUrlCommand*)command {
   NSLog(@"hidewebViewView");
+
+  isPreview = false;
+  appDomain = @"";
+  appKey = @"";
+
   [self.commandDelegate runInBackground:^{
     @try {
 
@@ -204,42 +219,7 @@
 }
 
 - (BOOL)shouldOverrideLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType {
-  NSString *url = request.URL.absoluteString;
-
-  BOOL shouldNavigate = [self allowRequestUrl:url preferences:self.commandDelegate.settings];
-  [self callUrlCallback:url didNavigate:shouldNavigate];
-
-  return shouldNavigate;
-}
-
-- (BOOL)allowRequestUrl:(NSString*)url preferences:(NSDictionary*)preferences {
-  NSMutableArray *allowRegexes = [NSMutableArray arrayWithCapacity:10];
-  NSMutableArray *disallowRegexes = [NSMutableArray arrayWithCapacity:10];
-
-  for (id key in preferences) {
-    if ([key hasPrefix:@"allowrequesturl"]) {
-      [allowRegexes addObject:[self.commandDelegate.settings objectForKey:key]];
-    }
-    if ([key hasPrefix:@"disallowrequesturl"]) {
-      [disallowRegexes addObject:[self.commandDelegate.settings objectForKey:key]];
-    }
-  }
-
-  for (id regex in disallowRegexes) {
-    NSRange range = [url rangeOfString:regex options:NSRegularExpressionSearch];
-    if (range.location != NSNotFound) {
-      return NO;
-    }
-  }
-
-  for (id regex in allowRegexes) {
-    NSRange range = [url rangeOfString:regex options:NSRegularExpressionSearch];
-    if (range.location != NSNotFound) {
-      return YES;
-    }
-  }
-
-  return NO;
+  return true;
 }
 
 - (void) onResume {
